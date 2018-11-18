@@ -67,6 +67,23 @@ module.exports = function urlRoutes(express){
         });
     });
 
+    // Get a dataURL of a URL QR code
+    router.get('/url/:id/svgRaw', async (req, res, next) => {
+        const item = await ds.find('url', req.params.id);
+
+        if(!item) return res.status(404).json({ message: 'Not found' });
+
+        fs.readFile(item.svgFilepath, 'base64', (err, data) => {
+            if(err) return res.status(500).json({ message: 'Server error' });
+
+            data = 'data:image/svg+xml;base64,' + data;
+
+            res.type('text');
+
+            res.send(data);
+        });
+    });
+
     // Get a PNG of a URL QR code
     router.get('/url/:id/png', async (req, res, next) => {
         const item = await ds.find('url', req.params.id);
@@ -91,10 +108,26 @@ module.exports = function urlRoutes(express){
         });
     });
 
+    router.get('/url/:id/pngRaw', async (req, res, next) => {
+        const item = await ds.find('url', req.params.id);
+
+        if(!item) return res.status(404).json({ message: 'Not found' });
+
+        fs.readFile(item.pngFilepath, 'base64', (err, data) => {
+            if(err) return res.status(500).json({ message: 'Server error' });
+
+            data = 'data:image/png;base64,' + data;
+
+            res.type('text');
+
+            res.send(data);
+        });
+    });
+
     // Sanitize internal QR descriptor object for public viewing
     function getPublicDescriptor(o){
 
-        const publicProps = ['id', 'apiUrl', 'svgUrl', 'pngUrl', 'created'];
+        const publicProps = ['id', 'apiUrl', 'svgUrl', 'svgRaw', 'pngUrl', 'pngRaw', 'created'];
 
         const data = {};
 
