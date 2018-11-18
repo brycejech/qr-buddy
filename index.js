@@ -14,6 +14,8 @@ const server = express();
 server.set('case sensitive routing', true);
 server.enable('trust proxy'); // If running behind Nginx proxy
 
+server.use(express.static(path.join(__dirname, 'client')));
+
 // Parse cookies, accept form data
 // server.use(cookieParser());
 server.use(bodyParser.json(), bodyParser.urlencoded({extended: true}));
