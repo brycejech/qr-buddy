@@ -1,3 +1,90 @@
-<div class="container">
-    <h1 class="text-center">Hello World!</h1>
+<div class="container my-5">
+    <h1 class="text-center text-ul">QR Buddy</h1>
+    <div class="row">
+        <div class="col-6">
+            <h2>Create QR Code from URL</h2>
+            <div id="url-form-container">
+                <form action="" id="url-form">
+                    <label>
+                        URL<br>
+                        <input type="text" class="link-input" placeholder="https://github.com">
+                    </label>
+                    <input type="submit" class="btn btn-primary btn-block link-submit" value="Submit">
+                </form>
+            </div>
+            <div class="url-img-container"></div>
+            <hr>
+            <h3 class="text-center">Links Created</h3>
+            <div id="links"></div>
+        </div>
+        <div class="col-6">
+            <h3 class="text-center">vCards Created</h3>
+            <div id="vcards"></div>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript">
+    'use strict';
+
+    // Handle link form submission
+    (function(){
+        var linkSubmit  = document.querySelector('.link-submit'),
+            linkInput   = document.querySelector('.link-input'),
+            qrContainer = document.querySelector('.url-img-container');
+
+        linkSubmit.addEventListener('click', function(e){
+            e.preventDefault();
+
+            ajax({
+                url: '/api/v1/url',
+                method: 'PUT',
+                dataType: 'json',
+                data: JSON.stringify({ url: linkInput.value }),
+                success: function(data){
+
+                    var img = document.createElement('img');
+                    img.src = data.svgUrl;
+                    qrContainer.innerHTML = '';
+                    qrContainer.appendChild(img);
+                },
+                error: function(xhr, status, err){
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(err);
+                }
+            });
+            
+        });
+    })();
+
+    (function(){
+        ajax({
+            url: '/api/v1/url',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data){
+                data.forEach(function(item){
+                    var html = `
+                        <p>
+                            <strong>ID:</strong> ${ item.id }<br>
+                            <strong>Created:</strong> ${ item.created }<br>
+                            <a href="${ item.apiUrl }" target="_blank" rel="noopener">API URL</a><br>
+                            <a href="${ item.svgUrl }" target="_blank" rel="noopener">SVG Image</a><br>
+                            <a href="${ item.svgRaw }" target="_blank" rel="noopener">Raw SVG Data</a><br>
+                            <a href="${ item.pngUrl }" target="_blank" rel="noopener">PNG Image</a><br>
+                            <a href="${ item.pngRaw }" target="_blank" rel="noopener">Raw PNG Data</a><br>
+                        </p>
+                    `;
+
+                    document.getElementById('links').innerHTML += html;
+                });
+            },
+            error: function(xhr, status, err){
+                console.log(xhr);
+                console.log(status);
+                console.log(err);
+            }
+        })
+    })();
+</script>
