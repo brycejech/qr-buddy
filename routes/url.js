@@ -1,8 +1,11 @@
 'use strict';
 
-const fs      = require('fs'),
-      ds      = require('../lib/data-store'),
-      qrBuddy = require('../lib/qr-buddy');
+const fs        = require('fs'),
+      fsHelpers = require('../lib/fs-helpers'),
+      ds        = require('../lib/data-store'),
+      qrBuddy   = require('../lib/qr-buddy');
+
+const getPublicDescriptor = require('../lib/get-public-descriptor');
 
 const router = require('express').Router();
 
@@ -14,7 +17,7 @@ module.exports = function urlRoutes(express){
         try{
             let results = await ds.find('url');
 
-            results = results.map(getPublicDescriptor).reverse();
+            results = results.map(getPublicDescriptor).reverse(); // Most recent first
 
             res.json(results);
         }
@@ -35,108 +38,109 @@ module.exports = function urlRoutes(express){
     });
 
     // Get QR code descriptor
-    router.get('/api/v1/url/:id', async (req, res, next) => {
-        const item = await ds.find('url', req.params.id);
+    router.get('/api/v1/url/:id', _findItem, async (req, res, next) => {
+        const item = getPublicDescriptor(res.locals.item)
 
-        if(!item) return res.status(404).json({ message: 'Not found' });
-
-        res.json(getPublicDescriptor(item));
+        res.json(item);
     });
 
     // Get an SVG of a URL QR code
-    router.get('/url/:id/svg', async (req, res, next) => {
-        const item = await ds.find('url', req.params.id);
+    router.get('/url/:id/svg', _findItem, async (req, res, next) => {
+        const item = res.locals.item;
 
-        if(!item) return res.status(404).json({ message: 'Not found' });
+        if(!(await fsHelpers.fileExists(item.svgFilepath))){
+            return res.status(404).json({ message: 'Image file not found' });
+        }
 
-        fs.access(item.svgFilepath, fs.constants.F_OK, err => {
-            if(err) return res.status(404).json({ message: 'Not found' });
+        const stream = fs.createReadStream(item.svgFilepath);
 
-            const stream = fs.createReadStream(item.svgFilepath);
+        stream
+            .on('close', () => res.end())
+            .on('error', e => {
+                stream.close(); // Close file descriptor
+                res.status(500).json({ message: 'Server error' });
+            });
 
-            stream
-                .on('close', () => res.end())
-                .on('error', e => {
-                    stream.close();
-                    res.status(500).json({ message: 'Server error' });
-                });
+        res.type('svg');
 
-            res.type('svg');
-
-            stream.pipe(res);
-        });
+        stream.pipe(res);
     });
 
     // Get a dataURL of a URL QR code
-    router.get('/url/:id/svgRaw', async (req, res, next) => {
-        const item = await ds.find('url', req.params.id);
+    router.get('/url/:id/svgRaw', _findItem, async (req, res, next) => {
+        const item = res.locals.item;
 
-        if(!item) return res.status(404).json({ message: 'Not found' });
+        if(!(await fsHelpers.fileExists(item.svgFilepath))){
+            return res.status(404).json({ message: 'Image file not found' });
+        }
 
-        fs.readFile(item.svgFilepath, 'base64', (err, data) => {
-            if(err) return res.status(500).json({ message: 'Server error' });
-
-            data = 'data:image/svg+xml;base64,' + data;
+        try{
+            const dataUrl = await fsHelpers.getFileDataUrl(item.svgFilepath);
 
             res.type('text');
 
-            res.send(data);
-        });
+            return res.send(dataUrl);
+        }
+        catch(e){
+            return res.status(500).send({ message: 'Server error' });
+        }
     });
 
     // Get a PNG of a URL QR code
-    router.get('/url/:id/png', async (req, res, next) => {
-        const item = await ds.find('url', req.params.id);
+    router.get('/url/:id/png', _findItem, async (req, res, next) => {
+        const item = res.locals.item;
 
-        if(!item) return res.status(404).json({ message: 'Not found' });
+        if(!(await fsHelpers.fileExists(item.pngFilepath))){
+            return res.status(404).json({ message: 'Image file not found' });
+        }
 
-        fs.access(item.pngFilepath, fs.constants.F_OK, err => {
-            if(err) return res.status(404).json({ message: 'Not found' });
+        const stream = fs.createReadStream(item.pngFilepath);
 
-            const stream = fs.createReadStream(item.pngFilepath);
+        stream
+            .on('close', () => res.end())
+            .on('error', e => {
+                stream.close(); // Close file descriptor
+                res.status(500).json({ message: 'Server error' });
+            });
 
-            stream
-                .on('close', () => res.end())
-                .on('error', e => {
-                    stream.close();
-                    res.status(500).json({ message: 'Server error' });
-                });
+        res.type('png');
 
-            res.type('png');
-
-            stream.pipe(res);
-        });
+        stream.pipe(res);
     });
 
-    router.get('/url/:id/pngRaw', async (req, res, next) => {
-        const item = await ds.find('url', req.params.id);
+    router.get('/url/:id/pngRaw', _findItem, async (req, res, next) => {
+        const item = res.locals.item;
 
-        if(!item) return res.status(404).json({ message: 'Not found' });
+        if(!(await fsHelpers.fileExists(item.pngFilepath))){
+            return res.status(404).json({ message: 'Image file not found' });
+        }
 
-        fs.readFile(item.pngFilepath, 'base64', (err, data) => {
-            if(err) return res.status(500).json({ message: 'Server error' });
-
-            data = 'data:image/png;base64,' + data;
+        try{
+            const fileData = await fsHelpers.getFileDataUrl(item.pngFilepath);
 
             res.type('text');
 
-            res.send(data);
-        });
+            return res.send(fileData);
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ message: 'Server error' });
+        }
     });
 
-    // Sanitize internal QR descriptor object for public viewing
-    function getPublicDescriptor(o){
-
-        const publicProps = ['id', 'apiUrl', 'svgUrl', 'svgRaw', 'pngUrl', 'pngRaw', 'created', 'data', 'dataType'];
-
-        const data = {};
-
-        for(const prop of publicProps){
-            data[prop] = o[prop];
-        }
-
-        return data;
-    }
-
     return router;
+}
+
+
+async function _findItem(req, res, next){
+    if(!req.params.id) return next();
+
+    const item = await ds.find('url', req.params.id);
+
+    // If item wasn't found, kill the request
+    if(!item) return res.status(404).json({ message: 'Not found' });
+
+    res.locals.item = item;
+
+    return next();
 }
