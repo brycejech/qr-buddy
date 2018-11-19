@@ -2,12 +2,10 @@
 
 const router = require('express').Router();
 
-module.exports = function(express){
-    const create   = require('./create')(express),   // PUT routes
-          generics = require('./generics')(express); // GET routes
+module.exports = function(server){
+    const create   = require('./create')(server),   // PUT routes
+          generics = require('./generics')(server); // GET routes
 
-    router.use(create);
-    router.use(generics);
-
-    return router;
+    server.use(create);
+    server.use(generics);
 }

@@ -43,8 +43,7 @@ server.get('/', (req, res, next) => {
 
 
 // Mount routes
-const routes = require('./routes')(server);
-server.use(routes);
+require('./routes')(server);
 
 
 // Start server
