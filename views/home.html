@@ -82,7 +82,7 @@
                         <div class="col-6">
                             <label>
                                 Home Email
-                                <input type="text" class="homeEmail" placeholder="jdoe@home.com">
+                                <input type="text" class="email" placeholder="jdoe@home.com">
                             </label>
                         </div>
                         <div class="col-6">
@@ -261,7 +261,7 @@
             // Org
             'organization','title','website',
             // Emails
-            'homeEmail','workEmail',
+            'email','workEmail',
             // Phones
             'cellPhone','workPhone','homePhone','pager',
             // Faxes
@@ -301,7 +301,6 @@
                         </p>
                     `;
                 });
-                console.log(html);
                 document.getElementById('links').innerHTML = html;
             },
             error: function(xhr, status, err){

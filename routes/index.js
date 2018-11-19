@@ -3,11 +3,11 @@
 const router = require('express').Router();
 
 module.exports = function(express){
-    const urlRouter   = require('./url')(express),
-          vCardRouter = require('./vCard')(express);
+    const create   = require('./create')(express),
+          generics = require('./generics')(express);
 
-    router.use(urlRouter);
-    router.use(vCardRouter);
+    router.use(create);
+    router.use(generics);
 
     return router;
 }
