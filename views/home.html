@@ -15,7 +15,7 @@
             </div>
             <div class="url-img-container text-center mb-5" style="font-size: 2.2rem"></div>
             <h3 class="text-center">Links Created</h3>
-            <div id="links" style="max-height: 250px; overflow-y: scroll;"></div>
+            <div id="links" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
         </div>
         <hr>
         <div class="col-md-8 col-md-offset-2">
@@ -40,13 +40,13 @@
                         <div class="col-xs-6 col-sm-3">
                             <label>
                                 Prefix
-                                <input type="text" class="prefix" placeholder="Mr.">
+                                <input type="text" class="namePrefix" placeholder="Mr.">
                             </label>
                         </div>
                         <div class="col-xs-6 col-sm-3">
                             <label>
                                 Suffix
-                                <input type="text" class="suffix" placeholder="Sr.">
+                                <input type="text" class="nameSuffix" placeholder="Sr.">
                             </label>
                         </div>
                         <div class="col-xs-12 col-sm-6">
@@ -159,9 +159,9 @@
                     <input type="submit" class="vCard-submit btn btn-primary" value="Submit">
                 </form>
             </div>
-
+            <div class="vcard-img-container text-center mb-5" style="font-size: 2.2rem"></div>
             <h3 class="text-center">vCards Created</h3>
-            <div id="vcards"></div>
+            <div id="vcards" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
         </div>
     </div>
 </div>
@@ -210,9 +210,7 @@
                     qrContainer.appendChild(urlAnchor);
                 },
                 error: function(xhr, status, err){
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(err);
+                    console.error(status, err);
                 }
             });
 
@@ -221,20 +219,45 @@
 
     // Handle contact form submission
     (function(){
-        var vCardForm = document.getElementById('vcard-form'),
-            submitBtn = vCardForm.querySelector('.vCard-submit');
+        var vCardForm   = document.getElementById('vcard-form'),
+            submitBtn   = vCardForm.querySelector('.vCard-submit'),
+            qrContainer = document.querySelector('.vcard-img-container');
 
         submitBtn.addEventListener('click', function(e){
             e.preventDefault();
 
-            var data = getFormData();
+            ajax({
+                url: '/api/v1/vcard',
+                method: 'PUT',
+                dataType: 'json',
+                data: JSON.stringify(getFormData()),
+                success: function(data){
 
-            console.log(data);
+                    // Clear contents
+                    qrContainer.innerHTML = '';
+
+                    // Full-screen link
+                    var imgAnchor = document.createElement('a');
+                    imgAnchor.innerText = 'View Fullscreen';
+                    imgAnchor.setAttribute('target', '_blank');
+                    imgAnchor.setAttribute('rel', 'noopener');
+                    imgAnchor.href = data.svgUrl;
+                    qrContainer.appendChild(imgAnchor);
+
+                    // Display QR image
+                    var img = document.createElement('img');
+                    img.src = data.svgUrl;
+                    qrContainer.appendChild(img);
+                },
+                error: function(xhr, status, err){
+                    console.error(status, err);
+                }
+            });
         });
 
         var inputs = [
             // Name
-            'firstName', 'lastName','prefix','suffix','nickname',
+            'firstName', 'lastName','namePrefix','nameSuffix','nickname',
             // Org
             'organization','title','website',
             // Emails
@@ -262,28 +285,51 @@
         }
     })();
 
+    // Get all submitted data
     (function(){
         ajax({
             url: '/api/v1/url',
             method: 'GET',
             dataType: 'json',
             success: function(data){
+                var html = ''
                 data.forEach(function(item){
-                    var html = `
+                    html += `
                         <p>
-                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace">${ item.id }</a><br>
+                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
                             <strong>Created:</strong> ${ item.created }<br>
                         </p>
                     `;
-
-                    document.getElementById('links').innerHTML += html;
                 });
+                console.log(html);
+                document.getElementById('links').innerHTML = html;
             },
             error: function(xhr, status, err){
                 console.log(xhr);
                 console.log(status);
                 console.log(err);
             }
-        })
+        });
+
+        ajax({
+            url: '/api/v1/vcard',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data){
+                var html = '';
+                data.forEach(function(item){
+                    html += `
+                        <p>
+                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
+                            <strong>Created:</strong> ${ item.created }<br>
+                        </p>
+                    `;
+                });
+                document.getElementById('vcards').innerHTML = html;
+            },
+            error: function(xhr, status, err){
+                console.error(status, err);
+            }
+        });
     })();
 </script>
