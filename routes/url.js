@@ -127,7 +127,7 @@ module.exports = function urlRoutes(express){
     // Sanitize internal QR descriptor object for public viewing
     function getPublicDescriptor(o){
 
-        const publicProps = ['id', 'apiUrl', 'svgUrl', 'svgRaw', 'pngUrl', 'pngRaw', 'created'];
+        const publicProps = ['id', 'apiUrl', 'svgUrl', 'svgRaw', 'pngUrl', 'pngRaw', 'created', 'data', 'dataType'];
 
         const data = {};
 
