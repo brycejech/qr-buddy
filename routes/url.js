@@ -14,7 +14,7 @@ module.exports = function urlRoutes(express){
         try{
             let results = await ds.find('url');
 
-            results = results.map(getPublicDescriptor);
+            results = results.map(getPublicDescriptor).reverse();
 
             res.json(results);
         }
