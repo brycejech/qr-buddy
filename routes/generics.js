@@ -1,11 +1,12 @@
 'use strict';
 
-'use strict';
+/*
+    Generic routes for getting descriptors and images of all supported types
+*/
 
 const fs        = require('fs'),
       fsHelpers = require('../lib/fs-helpers'),
-      ds        = require('../lib/data-store'),
-      qrBuddy   = require('../lib/qr-buddy');
+      ds        = require('../lib/data-store');
 
 const getPublicDescriptor = require('../lib/get-public-descriptor');
 
