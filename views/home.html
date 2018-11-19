@@ -9,10 +9,12 @@
                         URL<br>
                         <input type="text" class="link-input" placeholder="https://github.com">
                     </label>
-                    <input type="submit" class="btn btn-primary btn-block link-submit" value="Submit">
+                    <div class="">
+                        <input type="submit" class="btn btn-primary link-submit" value="Submit">
+                    </div>
                 </form>
             </div>
-            <div class="url-img-container"></div>
+            <div class="url-img-container text-center" style="font-size: 2.2rem"></div>
             <hr>
             <h3 class="text-center">Links Created</h3>
             <div id="links"></div>
@@ -43,10 +45,29 @@
                 data: JSON.stringify({ url: linkInput.value }),
                 success: function(data){
 
+                    // Clear contents
+                    qrContainer.innerHTML = '';
+
+                    // Full-screen link
+                    var imgAnchor = document.createElement('a');
+                    imgAnchor.innerText = 'View Fullscreen';
+                    imgAnchor.setAttribute('target', '_blank');
+                    imgAnchor.setAttribute('rel', 'noopener');
+                    imgAnchor.href = data.svgUrl;
+                    qrContainer.appendChild(imgAnchor);
+
+                    // Display the QR image
                     var img = document.createElement('img');
                     img.src = data.svgUrl;
-                    qrContainer.innerHTML = '';
                     qrContainer.appendChild(img);
+
+                    // Add a link to the submitted URL
+                    var urlAnchor = document.createElement('a');
+                    urlAnchor.innerText = data.data;
+                    urlAnchor.setAttribute('target', '_blank');
+                    urlAnchor.setAttribute('rel', 'noopener');
+                    urlAnchor.href = data.data;
+                    qrContainer.appendChild(urlAnchor);
                 },
                 error: function(xhr, status, err){
                     console.log(xhr);
@@ -54,7 +75,7 @@
                     console.log(err);
                 }
             });
-            
+
         });
     })();
 
@@ -67,13 +88,8 @@
                 data.forEach(function(item){
                     var html = `
                         <p>
-                            <strong>ID:</strong> ${ item.id }<br>
+                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace">${ item.id }</a><br>
                             <strong>Created:</strong> ${ item.created }<br>
-                            <a href="${ item.apiUrl }" target="_blank" rel="noopener">API URL</a><br>
-                            <a href="${ item.svgUrl }" target="_blank" rel="noopener">SVG Image</a><br>
-                            <a href="${ item.svgRaw }" target="_blank" rel="noopener">Raw SVG Data</a><br>
-                            <a href="${ item.pngUrl }" target="_blank" rel="noopener">PNG Image</a><br>
-                            <a href="${ item.pngRaw }" target="_blank" rel="noopener">Raw PNG Data</a><br>
                         </p>
                     `;
 
