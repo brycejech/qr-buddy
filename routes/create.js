@@ -75,5 +75,42 @@ module.exports = function urlRoutes(express){
         }
     });
 
+
+    router.put('/api/v1/email', async (req, res, next) => {
+        try{
+            const result = await qrBuddy.email(req.body.email, req.body.subject, req.body.body);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ err: e });
+        }
+    });
+
+    router.put('/api/v1/sms', async (req, res, next) => {
+        try{
+            const result = await qrBuddy.sms(req.body.number, req.body.body);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ err: e });
+        }
+    });
+
+    router.put('/api/v1/phone', async (req, res, next) => {
+        try{
+            const result = await qrBuddy.phone(req.body.number);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ err: e });
+        }
+    });
+
     return router;
 }
