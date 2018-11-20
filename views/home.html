@@ -34,12 +34,19 @@
             <div id="url-pane" class="pane active">
                 <h4 class="text-center">Create QR Code from Website</h4>
                 <div id="url-form-container">
-                    <form action="" id="url-form">
-                        <label>
-                            URL<br>
-                            <input type="text" class="link-input" placeholder="https://github.com">
-                        </label>
-                        <input type="submit" class="btn btn-primary link-submit" value="Submit">
+                    <form action="/api/v1/url" method="PUT" id="url-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <label>
+                                    URL<br>
+                                    <input type="text" name="url" data-validator="^https?:\/\/" data-error="URL must begin with http:// or https://" placeholder="https://github.com">
+                                    <span class="alert danger"></span>
+                                </label>
+                            </div>
+                            <div class="col-12">
+                                <input type="submit" class="btn btn-primary link-submit" value="Submit">
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="url-img-container text-center mb-5" style="font-size: 2.2rem"></div>
@@ -55,18 +62,18 @@
             <div id="contact-pane" class="pane">
                 <h4 class="text-center">Create QR Code from vCard</h4>
                 <div id="vcard-form-container" class="mb-5">
-                    <form action="" id="vcard-form">
+                    <form action="/api/v1/vcard" method="PUT" id="vcard-form">
                         <div class="row">
                             <div class="col-6">
                                 <label>
                                     First Name
-                                    <input type="text" class="firstName" placeholder="John">
+                                    <input type="text" name="firstName" placeholder="John">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Last Name
-                                    <input type="text" class="lastName" placeholder="Doe">
+                                    <input type="text" name="lastName" placeholder="Doe">
                                 </label>
                             </div>
                         </div>
@@ -74,19 +81,19 @@
                             <div class="col-xs-6 col-sm-3">
                                 <label>
                                     Prefix
-                                    <input type="text" class="namePrefix" placeholder="Mr.">
+                                    <input type="text" name="namePrefix" placeholder="Mr.">
                                 </label>
                             </div>
                             <div class="col-xs-6 col-sm-3">
                                 <label>
                                     Suffix
-                                    <input type="text" class="nameSuffix" placeholder="Sr.">
+                                    <input type="text" name="nameSuffix" placeholder="Sr.">
                                 </label>
                             </div>
                             <div class="col-xs-12 col-sm-6">
                                 <label>
                                     Nickname
-                                    <input type="text" class="nickname" placeholder="Johnny">
+                                    <input type="text" name="nickname" placeholder="Johnny">
                                 </label>
                             </div>
                         </div>
@@ -94,13 +101,13 @@
                             <div class="col-6">
                                 <label>
                                     Organization
-                                    <input type="text" class="organization" placeholder="Organization">
+                                    <input type="text" name="organization" placeholder="Organization">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Title
-                                    <input type="text" class="title" placeholder="Job Title">
+                                    <input type="text" name="title" placeholder="Job Title">
                                 </label>
                             </div>
                         </div>
@@ -108,7 +115,7 @@
                             <div class="col-12">
                                 <label>
                                     Website
-                                    <input type="text" class="website" placeholder="https://website.com">
+                                    <input type="text" name="website" placeholder="https://website.com">
                                 </label>
                             </div>
                         </div>
@@ -116,13 +123,13 @@
                             <div class="col-6">
                                 <label>
                                     Home Email
-                                    <input type="text" class="email" placeholder="jdoe@home.com">
+                                    <input type="text" name="email" placeholder="jdoe@home.com">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Work Email
-                                    <input type="text" class="workEmail" placeholder="jdoe@work.com">
+                                    <input type="text" name="workEmail" placeholder="jdoe@work.com">
                                 </label>
                             </div>
                         </div>
@@ -130,13 +137,13 @@
                             <div class="col-6">
                                 <label>
                                     Cell Phone
-                                    <input type="text" class="cellPhone" placeholder="Cell Phone">
+                                    <input type="text" name="cellPhone" placeholder="Cell Phone">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Work Phone
-                                    <input type="text" class="workPhone" placeholder="Work Phone">
+                                    <input type="text" name="workPhone" placeholder="Work Phone">
                                 </label>
                             </div>
                         </div>
@@ -144,13 +151,13 @@
                             <div class="col-6">
                                 <label>
                                     Home Phone
-                                    <input type="text" class="homePhone" placeholder="Home Phone">
+                                    <input type="text" name="homePhone" placeholder="Home Phone">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Pager
-                                    <input type="text" class="pager" placeholder="Pager">
+                                    <input type="text" name="pager" placeholder="Pager">
                                 </label>
                             </div>
                         </div>
@@ -158,13 +165,13 @@
                             <div class="col-6">
                                 <label>
                                     Home Fax
-                                    <input type="text" class="homeFax" placeholder="Home Fax">
+                                    <input type="text" name="homeFax" placeholder="Home Fax">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Work Fax
-                                    <input type="text" class="workFax" placeholder="Work Fax">
+                                    <input type="text" name="workFax" placeholder="Work Fax">
                                 </label>
                             </div>
                         </div>
@@ -172,13 +179,13 @@
                             <div class="col-6">
                                 <label>
                                     Birthday
-                                    <input type="text" class="birthday" placeholder="06/06/1980">
+                                    <input type="text" name="birthday" placeholder="06/06/1980">
                                 </label>
                             </div>
                             <div class="col-6">
                                 <label>
                                     Anniversary
-                                    <input type="text" class="anniversary" placeholder="06/06/2000">
+                                    <input type="text" name="anniversary" placeholder="06/06/2000">
                                 </label>
                             </div>
                         </div>
@@ -186,7 +193,7 @@
                             <div class="col-12">
                                 <label>
                                     Notes
-                                    <textarea class="notes" placeholder="Notes" rows="6"></textarea>
+                                    <textarea name="notes" placeholder="Notes" rows="6"></textarea>
                                 </label>
                             </div>
                         </div>
@@ -206,24 +213,25 @@
             <div id="email-pane" class="pane">
                 <h4 class="text-center">Send an Email QR Code</h4>
                 <div id="email-form-container">
-                    <form action="" id="email-form">
+                    <form action="/api/v1/email" method="PUT" id="email-form" novalidate>
                         <div class="row">
                             <div class="col-12">
                                 <label>
                                     Email
-                                    <input type="email" class="email" placeholder="Email Address">
+                                    <input type="email" name="email" data-validator=".+@.*\..{2,}" data-error="Invalid email" placeholder="Email Address">
+                                    <span class="alert danger"></span>
                                 </label>
                             </div>
                             <div class="col-12">
                                 <label>
                                     Subject
-                                    <input type="text" class="subject" placeholder="Subject Line">
+                                    <input type="text" name="subject" placeholder="Subject Line">
                                 </label>
                             </div>
                             <div class="col-12">
                                 <label>
                                     Body
-                                    <textarea rows="4" class="body" placeholder="Body Text"></textarea>
+                                    <textarea rows="4" name="body" placeholder="Body Text"></textarea>
                                 </label>
                             </div>
                             <div class="row">
@@ -247,18 +255,18 @@
             <div id="sms-pane" class="pane">
                 <h4 class="text-center">Send an SMS QR Code</h4>
                 <div id="sms-form-container">
-                    <form action="" id="sms-form">
+                    <form action="/api/v1/sms" method="PUT" id="sms-form">
                         <div class="row">
                             <div class="col-12">
                                 <label>
                                     Phone Number
-                                    <input type="text" class="number" placeholder="405-867-5309">
+                                    <input type="text" name="number" placeholder="405-867-5309">
                                 </label>
                             </div>
                             <div class="col-12">
                                 <label>
                                     Body
-                                    <textarea rows="4" class="body" placeholder="Body Text"></textarea>
+                                    <textarea rows="4" name="body" placeholder="Body Text"></textarea>
                                 </label>
                             </div>
                         </div>
@@ -282,11 +290,11 @@
             <div id="phone-pane" class="pane">
                 <h4 class="text-center">Call a Phone Number QR Code</h4>
                 <div id="phone-form-container">
-                    <form action="" id="phone-form">
+                    <form action="/api/v1/phone" method="PUT" id="phone-form">
                         <div class="row">
                             <div class="col-12">
                                 Phone Number
-                                <input type="text" class="phone" placeholder="405-867-5309">
+                                <input type="text" name="number" placeholder="405-867-5309">
                             </div>
                         </div>
                         <div class="row">
@@ -307,8 +315,6 @@
 
 <script>
     'use strict';
-
-
 
 </script>
 

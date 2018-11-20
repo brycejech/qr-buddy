@@ -1,3 +1,11 @@
+.alert:empty {
+  display: none; }
+
+input.hasError,
+textarea.hasError,
+select.hasError {
+  border-color: red; }
+
 .btn-block {
   display: block !important;
   width: 100% !important; }
