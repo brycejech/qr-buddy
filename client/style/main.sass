@@ -1,0 +1,41 @@
+
+.btn-block
+    display: block !important
+    width: 100% !important
+
+.pane
+    display: none
+
+    &.active
+        display: block
+
+
+#form-select
+    border-radius: 3px
+    overflow: hidden
+
+    .pane-btn
+        font-family: 'Source Sans Pro', sans-serif
+        text-align: center
+        padding: 15px 35px
+        width: 125px
+        margin: 0
+        float: left
+        border: 1px solid rgba(0,0,0, 0.25)
+        cursor: pointer
+        user-select: none
+        background-color: #868686
+        color: white
+
+        transition: all .2s ease
+
+        i
+            font-weight: 600
+            font-size: 3rem
+
+        @media screen and (min-width: 992px)
+            width: 50%
+            padding: 25px 0
+
+        &.active
+            background-color: #4D4D4D

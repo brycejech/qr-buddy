@@ -1,0 +1,39 @@
+.btn-block {
+  display: block !important;
+  width: 100% !important; }
+
+.pane {
+  display: none; }
+  .pane.active {
+    display: block; }
+
+#form-select {
+  border-radius: 3px;
+  overflow: hidden; }
+  #form-select .pane-btn {
+    font-family: 'Source Sans Pro', sans-serif;
+    text-align: center;
+    padding: 15px 35px;
+    width: 125px;
+    margin: 0;
+    float: left;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #868686;
+    color: white;
+    -webkit-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease; }
+    #form-select .pane-btn i {
+      font-weight: 600;
+      font-size: 3rem; }
+    @media screen and (min-width: 992px) {
+      #form-select .pane-btn {
+        width: 50%;
+        padding: 25px 0; } }
+    #form-select .pane-btn.active {
+      background-color: #4D4D4D; }

@@ -1,167 +1,283 @@
 <div class="container my-5">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h2>Create QR Code from URL</h2>
-            <div id="url-form-container">
-                <form action="" id="url-form">
-                    <label>
-                        URL<br>
-                        <input type="text" class="link-input" placeholder="https://github.com">
-                    </label>
-                    <div class="">
-                        <input type="submit" class="btn btn-primary link-submit" value="Submit">
-                    </div>
-                </form>
+        <div class="col-md-3">
+            <h4 class="text-center">QR Code Type</h4>
+            <div id="form-select">
+                <div id="url-pane-btn" class="pane-btn active" data-target="#url-pane">
+                    <span class="full-width text-center">URL</span>
+                    <i class="fas fa-link"></i>
+                </div>
+                <div id="vcard-pane-btn" class="pane-btn" data-target="#contact-pane">
+                    <span class="full-width text-center">vCard</span>
+                    <i class="fas fa-address-card"></i>
+                </div>
+                <div id="email-pane-btn" class="pane-btn" data-target="#email-pane">
+                    <span class="full-width text-center">Email</span>
+                    <i class="far fa-envelope"></i>
+                </div>
+                <div id="sms-pane-btn" class="pane-btn" data-target="#sms-pane">
+                    <span class="full-width text-center">SMS</span>
+                    <i class="far fa-comments"></i>
+                </div>
+                <div id="phone-pane-btn" class="pane-btn" data-target="#phone-pane">
+                    <span class="full-width text-center">Phone</span>
+                    <i class="fas fa-phone-volume"></i>
+                </div>
             </div>
-            <div class="url-img-container text-center mb-5" style="font-size: 2.2rem"></div>
-            <h3 class="text-center">Links Created</h3>
-            <div id="links" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
         </div>
-        <hr>
-        <div class="col-md-8 col-md-offset-2">
-            <h2>Create QR Code from vCard</h2>
-            <div id="vcard-form-container mb-5">
-                <form action="" id="vcard-form">
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                First Name
-                                <input type="text" class="firstName" placeholder="John">
-                            </label>
+        <div id="pane-container" class="col-md-8 col-md-offset-1">
+            <!--
+                ========
+                URL Pane
+                ========
+            -->
+            <div id="url-pane" class="pane active">
+                <h4 class="text-center">Create QR Code from Website</h4>
+                <div id="url-form-container">
+                    <form action="" id="url-form">
+                        <label>
+                            URL<br>
+                            <input type="text" class="link-input" placeholder="https://github.com">
+                        </label>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary link-submit" value="Submit">
                         </div>
-                        <div class="col-6">
-                            <label>
-                                Last Name
-                                <input type="text" class="lastName" placeholder="Doe">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-3">
-                            <label>
-                                Prefix
-                                <input type="text" class="namePrefix" placeholder="Mr.">
-                            </label>
-                        </div>
-                        <div class="col-xs-6 col-sm-3">
-                            <label>
-                                Suffix
-                                <input type="text" class="nameSuffix" placeholder="Sr.">
-                            </label>
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <label>
-                                Nickname
-                                <input type="text" class="nickname" placeholder="Johnny">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Organization
-                                <input type="text" class="organization" placeholder="Organization">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Title
-                                <input type="text" class="title" placeholder="Job Title">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label>
-                                Website
-                                <input type="text" class="website" placeholder="https://website.com">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Home Email
-                                <input type="text" class="email" placeholder="jdoe@home.com">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Work Email
-                                <input type="text" class="workEmail" placeholder="jdoe@work.com">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Cell Phone
-                                <input type="text" class="cellPhone" placeholder="Cell Phone">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Work Phone
-                                <input type="text" class="workPhone" placeholder="Work Phone">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Home Phone
-                                <input type="text" class="homePhone" placeholder="Home Phone">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Pager
-                                <input type="text" class="pager" placeholder="Pager">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Home Fax
-                                <input type="text" class="homeFax" placeholder="Home Fax">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Work Fax
-                                <input type="text" class="workFax" placeholder="Work Fax">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>
-                                Birthday
-                                <input type="text" class="birthday" placeholder="06/06/1980">
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label>
-                                Anniversary
-                                <input type="text" class="anniversary" placeholder="06/06/2000">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label>
-                                Notes
-                                <textarea class="notes" placeholder="Notes" rows="6"></textarea>
-                            </label>
-                        </div>
-                    </div>
-                    <input type="submit" class="vCard-submit btn btn-primary" value="Submit">
-                </form>
+                    </form>
+                </div>
+                <div class="url-img-container text-center mb-5" style="font-size: 2.2rem"></div>
+                <h3 class="text-center">Links Created</h3>
+                <div id="links" class="text-center full-width" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
             </div>
-            <div class="vcard-img-container text-center mb-5" style="font-size: 2.2rem"></div>
-            <h3 class="text-center">vCards Created</h3>
-            <div id="vcards" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
+
+            <!--
+                ==========
+                vCard Pane
+                ==========
+            -->
+            <div id="contact-pane" class="pane">
+                <h4 class="text-center">Create QR Code from vCard</h4>
+                <div id="vcard-form-container mb-5">
+                    <form action="" id="vcard-form">
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    First Name
+                                    <input type="text" class="firstName" placeholder="John">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Last Name
+                                    <input type="text" class="lastName" placeholder="Doe">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-3">
+                                <label>
+                                    Prefix
+                                    <input type="text" class="namePrefix" placeholder="Mr.">
+                                </label>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <label>
+                                    Suffix
+                                    <input type="text" class="nameSuffix" placeholder="Sr.">
+                                </label>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <label>
+                                    Nickname
+                                    <input type="text" class="nickname" placeholder="Johnny">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Organization
+                                    <input type="text" class="organization" placeholder="Organization">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Title
+                                    <input type="text" class="title" placeholder="Job Title">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label>
+                                    Website
+                                    <input type="text" class="website" placeholder="https://website.com">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Home Email
+                                    <input type="text" class="email" placeholder="jdoe@home.com">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Work Email
+                                    <input type="text" class="workEmail" placeholder="jdoe@work.com">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Cell Phone
+                                    <input type="text" class="cellPhone" placeholder="Cell Phone">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Work Phone
+                                    <input type="text" class="workPhone" placeholder="Work Phone">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Home Phone
+                                    <input type="text" class="homePhone" placeholder="Home Phone">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Pager
+                                    <input type="text" class="pager" placeholder="Pager">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Home Fax
+                                    <input type="text" class="homeFax" placeholder="Home Fax">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Work Fax
+                                    <input type="text" class="workFax" placeholder="Work Fax">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>
+                                    Birthday
+                                    <input type="text" class="birthday" placeholder="06/06/1980">
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <label>
+                                    Anniversary
+                                    <input type="text" class="anniversary" placeholder="06/06/2000">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label>
+                                    Notes
+                                    <textarea class="notes" placeholder="Notes" rows="6"></textarea>
+                                </label>
+                            </div>
+                        </div>
+                        <input type="submit" class="vCard-submit btn btn-primary" value="Submit">
+                    </form>
+                </div>
+                <div class="vcard-img-container text-center mb-5" style="font-size: 2.2rem"></div>
+                <h3 class="text-center">vCards Created</h3>
+                <div id="vcards" class="text-center full-width" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
+            </div>
+
+            <!--
+                ==========
+                Email Pane
+                ==========
+            -->
+            <div id="email-pane" class="pane">
+                <h4 class="text-center">Send an Email QR Code</h4>
+                <div id="email-form-container">
+                    <form action="" id="email-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <label>
+                                    Email
+                                    <input type="email" class="email" placeholder="Email Address">
+                                </label>
+                            </div>
+                            <div class="col-12">
+                                <label>
+                                    Subject
+                                    <input type="text" class="subject" placeholder="Subject Line">
+                                </label>
+                            </div>
+                            <div class="col-12">
+                                <label>
+                                    Body
+                                    <textarea rows="4" class="body" placeholder="Body Text"></textarea>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--
+                ========
+                SMS Pane
+                ========
+            -->
+            <div id="sms-pane" class="pane">
+                <h4 class="text-center">Send an SMS QR Code</h4>
+                <div id="sms-form-container">
+                    <form action="" id="sms-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <label>
+                                    Phone Number
+                                    <input type="text" class="phone" placeholder="405-867-5309">
+                                </label>
+                            </div>
+                            <div class="col-12">
+                                <label>
+                                    Body
+                                    <textarea rows="4" class="body" placeholder="Body Text"></textarea>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--
+                ==========
+                Phone Pane
+                ==========
+            -->
+            <div id="phone-pane" class="pane">
+                <h4 class="text-center">Call a Phone Number QR Code</h4>
+                <div id="phone-form-container">
+                    <form action="" id="phone-form">
+                        <div class="row">
+                            <div class="col-12">
+                                Phone Number
+                                <input type="text" class="phone" placeholder="405-867-5309">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -169,166 +285,47 @@
 <script type="text/javascript">
     'use strict';
 
-    // Handle link form submission
     (function(){
-        var linkSubmit  = document.querySelector('.link-submit'),
-            linkInput   = document.querySelector('.link-input'),
-            qrContainer = document.querySelector('.url-img-container');
+        // Containers
+        var paneContainer = document.getElementById('pane-container');
 
-        linkSubmit.addEventListener('click', function(e){
-            e.preventDefault();
+        // Buttons
+        var urlPaneBtn   = document.getElementById('url-pane-btn'),
+            vCardPaneBtn = document.getElementById('vcard-pane-btn'),
+            emailPaneBtn = document.getElementById('email-pane-btn'),
+            smsPaneBtn   = document.getElementById('sms-pane-btn'),
+            phonePaneBtn = document.getElementById('phone-pane-btn');
 
-            ajax({
-                url: '/api/v1/url',
-                method: 'PUT',
-                dataType: 'json',
-                data: JSON.stringify({ url: linkInput.value }),
-                success: function(data){
+        var buttons = [ urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn, phonePaneBtn ];
 
-                    // Clear contents
-                    qrContainer.innerHTML = '';
+        function showPane(e){
+            var targetPane = this.getAttribute('data-target');
 
-                    // Full-screen link
-                    var imgAnchor = document.createElement('a');
-                    imgAnchor.innerText = 'View Fullscreen';
-                    imgAnchor.setAttribute('target', '_blank');
-                    imgAnchor.setAttribute('rel', 'noopener');
-                    imgAnchor.href = data.svgUrl;
-                    qrContainer.appendChild(imgAnchor);
+            if(!targetPane) return;
 
-                    // Display the QR image
-                    var img = document.createElement('img');
-                    img.src = data.svgUrl;
-                    qrContainer.appendChild(img);
+            ([].slice.call(paneContainer.querySelectorAll('.pane')))
+                .forEach(function(pane){
+                    pane.classList.remove('active');
+                });
 
-                    // Add a link to the submitted URL
-                    var urlAnchor = document.createElement('a');
-                    urlAnchor.innerText = data.data;
-                    urlAnchor.setAttribute('target', '_blank');
-                    urlAnchor.setAttribute('rel', 'noopener');
-                    urlAnchor.href = data.data;
-                    qrContainer.appendChild(urlAnchor);
-                },
-                error: function(xhr, status, err){
-                    console.error(status, err);
-                }
-            });
+            var pane = document.querySelector(targetPane);
 
-        });
-    })();
+            if(pane){
+                pane.classList.add('active');
 
-    // Handle contact form submission
-    (function(){
-        var vCardForm   = document.getElementById('vcard-form'),
-            submitBtn   = vCardForm.querySelector('.vCard-submit'),
-            qrContainer = document.querySelector('.vcard-img-container');
+                buttons.forEach(function(button){
+                    button.classList.remove('active');
+                });
 
-        submitBtn.addEventListener('click', function(e){
-            e.preventDefault();
-
-            ajax({
-                url: '/api/v1/vcard',
-                method: 'PUT',
-                dataType: 'json',
-                data: JSON.stringify(getFormData()),
-                success: function(data){
-
-                    // Clear contents
-                    qrContainer.innerHTML = '';
-
-                    // Full-screen link
-                    var imgAnchor = document.createElement('a');
-                    imgAnchor.innerText = 'View Fullscreen';
-                    imgAnchor.setAttribute('target', '_blank');
-                    imgAnchor.setAttribute('rel', 'noopener');
-                    imgAnchor.href = data.svgUrl;
-                    qrContainer.appendChild(imgAnchor);
-
-                    // Display QR image
-                    var img = document.createElement('img');
-                    img.src = data.svgUrl;
-                    qrContainer.appendChild(img);
-                },
-                error: function(xhr, status, err){
-                    console.error(status, err);
-                }
-            });
-        });
-
-        var inputs = [
-            // Name
-            'firstName', 'lastName','namePrefix','nameSuffix','nickname',
-            // Org
-            'organization','title','website',
-            // Emails
-            'email','workEmail',
-            // Phones
-            'cellPhone','workPhone','homePhone','pager',
-            // Faxes
-            'homeFax','workFax',
-            // Dates
-            'birthday','anniversary',
-            //Notes
-            'notes'
-        ];
-
-        function getFormData(){
-            var data = {}
-
-            inputs.forEach(function(name){
-                var el = vCardForm.querySelector('.' + name);
-
-                data[name] = el.value;
-            });
-
-            return data;
+                this.classList.add('active');
+            }
         }
-    })();
 
-    // Get all submitted data
-    (function(){
-        ajax({
-            url: '/api/v1/url',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data){
-                var html = ''
-                data.forEach(function(item){
-                    html += `
-                        <p>
-                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                            <strong>Created:</strong> ${ item.created }<br>
-                        </p>
-                    `;
-                });
-                document.getElementById('links').innerHTML = html;
-            },
-            error: function(xhr, status, err){
-                console.log(xhr);
-                console.log(status);
-                console.log(err);
-            }
+        buttons.forEach(function(btn){
+            btn.addEventListener('click', showPane);
         });
 
-        ajax({
-            url: '/api/v1/vcard',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data){
-                var html = '';
-                data.forEach(function(item){
-                    html += `
-                        <p>
-                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                            <strong>Created:</strong> ${ item.created }<br>
-                        </p>
-                    `;
-                });
-                document.getElementById('vcards').innerHTML = html;
-            },
-            error: function(xhr, status, err){
-                console.error(status, err);
-            }
-        });
     })();
 </script>
+
+<script type="text/javascript" src="/js/main.js"></script>
