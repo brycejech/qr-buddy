@@ -1,6 +1,6 @@
 'use strict';
 
-// Handle link form submission
+// Handle url form submit
 (function(){
     var linkSubmit  = document.querySelector('.link-submit'),
         linkInput   = document.querySelector('.link-input'),
@@ -48,7 +48,7 @@
     });
 })();
 
-// Handle contact form submission
+// Handle contact form submit
 (function(){
     var vCardForm   = document.getElementById('vcard-form'),
         submitBtn   = vCardForm.querySelector('.vCard-submit'),
@@ -116,8 +116,117 @@
     }
 })();
 
+// Handle email submit
+(function(){
+    var emailForm   = document.getElementById('email-form'),
+        emailSubmit = emailForm.querySelector('.email-submit'),
+        qrContainer = document.querySelector('.email-img-container');
+
+    var inputClasses = ['email', 'subject', 'body'];
+
+    function formSubmit(e){
+        e.preventDefault();
+
+        var data = {};
+
+        inputClasses.forEach(function(cls){
+            var el = emailForm.querySelector('.' + cls);
+
+            if(el && el.value){
+                data[cls] = el.value
+            }
+        });
+
+        ajax({
+            url: '/api/v1/email',
+            method: 'PUT',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function(data){
+
+                // Clear contents
+                qrContainer.innerHTML = '';
+
+                // Full-screen link
+                var imgAnchor = document.createElement('a');
+                imgAnchor.innerText = 'View Fullscreen';
+                imgAnchor.setAttribute('target', '_blank');
+                imgAnchor.setAttribute('rel', 'noopener');
+                imgAnchor.href = data.svgUrl;
+                qrContainer.appendChild(imgAnchor);
+
+                // Display the QR image
+                var img = document.createElement('img');
+                img.src = data.svgUrl;
+                qrContainer.appendChild(img);
+            },
+            error: function(xhr, status, err){
+                console.error(status, err);
+            }
+        })
+    }
+
+    emailSubmit.addEventListener('click', formSubmit);
+})();
+
+// Handle SMS submit
+(function(){
+
+    var smsForm     = document.getElementById('sms-form-container'),
+        smsSubmit   = smsForm.querySelector('.sms-submit'),
+        qrContainer = document.querySelector('.sms-img-container');
+
+    function formSubmit(e){
+        e.preventDefault();
+
+        var data = {},
+            inputClasses = ['number', 'body'];
+
+
+        inputClasses.forEach(function(cls){
+            var el = document.querySelector('.' + cls);
+
+            if(el && el.value){
+                data[cls] = el.value;
+            }
+        });
+
+        ajax({
+            url: '/api/v1/sms',
+            method: 'PUT',
+            dataType: 'json',
+            data: JSON.stringify(data),
+            success: function(data){
+                // Clear contents
+                qrContainer.innerHTML = '';
+
+                // Full-screen link
+                var imgAnchor = document.createElement('a');
+                imgAnchor.innerText = 'View Fullscreen';
+                imgAnchor.setAttribute('target', '_blank');
+                imgAnchor.setAttribute('rel', 'noopener');
+                imgAnchor.href = data.svgUrl;
+                qrContainer.appendChild(imgAnchor);
+
+                // Display the QR image
+                var img = document.createElement('img');
+                img.src = data.svgUrl;
+                qrContainer.appendChild(img);
+            },
+            error: function(xhr, status, err){
+                console.error(status, err);
+            }
+        });
+    }
+
+    smsSubmit.addEventListener('click', formSubmit);
+
+})();
+
 // Get all submitted data
 (function(){
+
+    // URLs
     ajax({
         url: '/api/v1/url',
         method: 'GET',
@@ -141,6 +250,7 @@
         }
     });
 
+    // vCards
     ajax({
         url: '/api/v1/vcard',
         method: 'GET',
@@ -161,4 +271,93 @@
             console.error(status, err);
         }
     });
+
+    // Emails
+    ajax({
+        url: '/api/v1/email',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var html = '';
+            data.forEach(function(item){
+                html += `
+                    <p>
+                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
+                        <strong>Created:</strong> ${ item.created }<br>
+                    </p>
+                `;
+            });
+            document.getElementById('emails').innerHTML = html;
+        },
+        error: function(xhr, status, err){
+            console.error(status, err);
+        }
+    });
+
+    // SMSs
+    ajax({
+        url: '/api/v1/sms',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data){
+            var html = '';
+            data.forEach(function(item){
+                html += `
+                    <p>
+                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
+                        <strong>Created:</strong> ${ item.created }<br>
+                    </p>
+                `;
+            });
+            document.getElementById('smss').innerHTML = html;
+        },
+        error: function(xhr, status, err){
+            console.error(status, err);
+        }
+    })
+
+
+})();
+
+// Handle pane switching
+(function(){
+    // Containers
+    var paneContainer = document.getElementById('pane-container');
+
+    // Buttons
+    var urlPaneBtn   = document.getElementById('url-pane-btn'),
+        vCardPaneBtn = document.getElementById('vcard-pane-btn'),
+        emailPaneBtn = document.getElementById('email-pane-btn'),
+        smsPaneBtn   = document.getElementById('sms-pane-btn'),
+        phonePaneBtn = document.getElementById('phone-pane-btn');
+
+    var buttons = [ urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn, phonePaneBtn ];
+
+    function showPane(e){
+        var targetPane = this.getAttribute('data-target');
+
+        if(!targetPane) return;
+
+        ([].slice.call(paneContainer.querySelectorAll('.pane')))
+            .forEach(function(pane){
+                pane.classList.remove('active');
+            });
+
+        var pane = document.querySelector(targetPane);
+
+        if(pane){
+            pane.classList.add('active');
+
+            buttons.forEach(function(button){
+                button.classList.remove('active');
+            });
+
+            this.classList.add('active');
+        }
+    }
+
+    buttons.forEach(function(btn){
+        btn.addEventListener('click', showPane);
+    });
+
 })();

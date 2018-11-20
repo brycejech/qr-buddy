@@ -39,9 +39,7 @@
                             URL<br>
                             <input type="text" class="link-input" placeholder="https://github.com">
                         </label>
-                        <div class="">
-                            <input type="submit" class="btn btn-primary link-submit" value="Submit">
-                        </div>
+                        <input type="submit" class="btn btn-primary link-submit" value="Submit">
                     </form>
                 </div>
                 <div class="url-img-container text-center mb-5" style="font-size: 2.2rem"></div>
@@ -56,7 +54,7 @@
             -->
             <div id="contact-pane" class="pane">
                 <h4 class="text-center">Create QR Code from vCard</h4>
-                <div id="vcard-form-container mb-5">
+                <div id="vcard-form-container" class="mb-5">
                     <form action="" id="vcard-form">
                         <div class="row">
                             <div class="col-6">
@@ -228,9 +226,17 @@
                                     <textarea rows="4" class="body" placeholder="Body Text"></textarea>
                                 </label>
                             </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="submit" class="email-submit btn btn-primary" value="Submit">
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
+                <div class="email-img-container text-center mb-5" style="font-size: 2.2rem"></div>
+                <h3 class="text-center">Emails Created</h3>
+                <div id="emails" class="text-center full-width" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
             </div>
 
             <!--
@@ -246,7 +252,7 @@
                             <div class="col-12">
                                 <label>
                                     Phone Number
-                                    <input type="text" class="phone" placeholder="405-867-5309">
+                                    <input type="text" class="number" placeholder="405-867-5309">
                                 </label>
                             </div>
                             <div class="col-12">
@@ -256,8 +262,16 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="submit" class="sms-submit btn btn-primary" value="Submit">
+                            </div>
+                        </div>
                     </form>
                 </div>
+                <div class="sms-img-container text-center mb-5" style="font-size: 2.2rem"></div>
+                <h3 class="text-center">SMSs Created</h3>
+                <div id="smss" class="text-center full-width" style="max-height: 250px; overflow-y: scroll; overflow-x: hidden;"></div>
             </div>
 
             <!--
@@ -282,50 +296,11 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     'use strict';
 
-    (function(){
-        // Containers
-        var paneContainer = document.getElementById('pane-container');
 
-        // Buttons
-        var urlPaneBtn   = document.getElementById('url-pane-btn'),
-            vCardPaneBtn = document.getElementById('vcard-pane-btn'),
-            emailPaneBtn = document.getElementById('email-pane-btn'),
-            smsPaneBtn   = document.getElementById('sms-pane-btn'),
-            phonePaneBtn = document.getElementById('phone-pane-btn');
 
-        var buttons = [ urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn, phonePaneBtn ];
-
-        function showPane(e){
-            var targetPane = this.getAttribute('data-target');
-
-            if(!targetPane) return;
-
-            ([].slice.call(paneContainer.querySelectorAll('.pane')))
-                .forEach(function(pane){
-                    pane.classList.remove('active');
-                });
-
-            var pane = document.querySelector(targetPane);
-
-            if(pane){
-                pane.classList.add('active');
-
-                buttons.forEach(function(button){
-                    button.classList.remove('active');
-                });
-
-                this.classList.add('active');
-            }
-        }
-
-        buttons.forEach(function(btn){
-            btn.addEventListener('click', showPane);
-        });
-
-    })();
 </script>
 
-<script type="text/javascript" src="/js/main.js"></script>
+<script src="/js/main.js"></script>
