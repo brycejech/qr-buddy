@@ -223,101 +223,50 @@
 
 })();
 
-// Get all submitted data
+
+// Get all submitted data and display it
 (function(){
 
-    // URLs
-    ajax({
-        url: '/api/v1/url',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data){
-            var html = ''
-            data.forEach(function(item){
-                html += `
-                    <p>
-                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                        <strong>Created:</strong> ${ item.created }<br>
-                    </p>
-                `;
-            });
-            document.getElementById('links').innerHTML = html;
-        },
-        error: function(xhr, status, err){
-            console.log(xhr);
-            console.log(status);
-            console.log(err);
-        }
+    [
+        { url: '/api/v1/url',   containerId: 'links' },
+        { url: '/api/v1/vcard', containerId: 'vcards' },
+        { url: '/api/v1/email', containerId: 'emails' },
+        { url: '/api/v1/sms',   containerId: 'smss'   },
+        { url: '/api/v1/phone', containerId: 'phones' }
+    ]
+    .forEach(function(endpoint){
+        ajax({
+            url: endpoint.url,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data){
+                var html = ''
+                data.forEach(function(item){
+                    html += `
+                        <p>
+                            <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
+                            <strong>Created:</strong> ${ item.created }<br>
+                        </p>
+                    `;
+                });
+                var container = document.getElementById(endpoint.containerId)
+
+                if(container){
+                    container.innerHTML = html;
+                }
+                else{
+                    console.error('Failed to lookup containerId for ' + endpoint.url + ' route');
+                }
+            },
+            error: function(xhr, status, err){
+                console.error('Failed to fetch data for ' + endpoint.url + ' route');
+                console.error(status, err);
+            }
+        });
     });
-
-    // vCards
-    ajax({
-        url: '/api/v1/vcard',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data){
-            var html = '';
-            data.forEach(function(item){
-                html += `
-                    <p>
-                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                        <strong>Created:</strong> ${ item.created }<br>
-                    </p>
-                `;
-            });
-            document.getElementById('vcards').innerHTML = html;
-        },
-        error: function(xhr, status, err){
-            console.error(status, err);
-        }
-    });
-
-    // Emails
-    ajax({
-        url: '/api/v1/email',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data){
-            var html = '';
-            data.forEach(function(item){
-                html += `
-                    <p>
-                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                        <strong>Created:</strong> ${ item.created }<br>
-                    </p>
-                `;
-            });
-            document.getElementById('emails').innerHTML = html;
-        },
-        error: function(xhr, status, err){
-            console.error(status, err);
-        }
-    });
-
-    // SMSs
-    ajax({
-        url: '/api/v1/sms',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data){
-            var html = '';
-            data.forEach(function(item){
-                html += `
-                    <p>
-                        <a href="${ item.apiUrl }" target="_blank" rel="noopener" style="font-family: monospace;">${ item.id }</a><br>
-                        <strong>Created:</strong> ${ item.created }<br>
-                    </p>
-                `;
-            });
-            document.getElementById('smss').innerHTML = html;
-        },
-        error: function(xhr, status, err){
-            console.error(status, err);
-        }
-    })
-
 
 })();
+
 
 // Handle pane switching
 (function(){
