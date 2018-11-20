@@ -59,11 +59,9 @@
 
                     // Input value must be validated
                     if(!!input.getAttribute('data-validator')){
-                        console.log('has data-validator');
                         const validator = new RegExp(input.getAttribute('data-validator'));
 
                         if(!validator.test(value)){
-                            console.log('validation failed');
                             // Validation failed
                             hasErrors = true;
                             input.classList.remove('success');
@@ -71,7 +69,6 @@
                             input.nextElementSibling.innerText = input.getAttribute('data-error');
                         }
                         else{
-                            console.log('validation passed');
                             // Validation passed
                             input.classList.remove('error');
                             input.classList.add('success');
