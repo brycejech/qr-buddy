@@ -8,17 +8,31 @@
 
         <!-- Font Awesome -->
         <link
+            type="text/css"
             rel="stylesheet"
             href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
             integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
             crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://getnucleon.com/release/latest/nucleon.min.css">
-        <link rel="stylesheet" href="/style/main.css">
+        <link type="text/css" rel="stylesheet" href="/style/vendor/modal/modal.min.css">
+        <link type="text/css" rel="stylesheet" href="/style/vendor/nucleon/nucleon.min.css">
+        <link type="text/css" rel="stylesheet" href="/style/main.css">
 
-        <script type="text/javascript" src="/js/lib/ajax.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/ajax/ajax.min.js"></script>
     </head>
     <body>
+        <nav>
+            <div class="container">
+                <a id="logo" href="/">
+                    <i class="fas fa-qrcode"></i> <h3>QR Buddy</h3>
+                </a>
+                <ul id="nav-buttons">
+
+                </ul>
+            </div>
+        </nav>
         {{{ body }}}
+
+        <script type="text/javascript" src="/js/vendor/modal/modal.min.js"></script>
     </body>
 </html>
