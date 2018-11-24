@@ -1,3 +1,18 @@
+@import 'colors'
+@import 'nav'
+
+body
+    background-color: $dark-gray
+    color: $white
+
+input, textarea, select
+    background-color: lighten($dark-gray, 3%)
+    color: white
+
+.label-body
+    color: white
+
+
 .alert:empty
     display: none
 
@@ -5,10 +20,17 @@ input.hasError,
 textarea.hasError,
 select.hasError
     border-color: red
-    
+
 .btn-block
     display: block !important
     width: 100% !important
+
+.panel
+    background-color: $gray
+    border-radius: 3px
+
+    &:empty
+        display: none
 
 .pane
     display: none
@@ -41,8 +63,65 @@ select.hasError
             font-size: 3rem
 
         @media screen and (min-width: 992px)
-            width: 50%
-            padding: 25px 0
+            width: 33.333%
+            padding: 15px 0
 
         &.active
             background-color: #4D4D4D
+
+#qr-container
+    position: relative
+    display: block
+    text-align: center
+    font-size: 2rem
+    max-height: 0
+    margin: 0
+    opacity: 0
+
+    transition: all .8s ease
+
+    &.active
+        max-height: 1000px
+        opacity: 1
+        margin-bottom: 2rem
+
+    img
+        max-width: 500px
+
+        @media screen and (min-width: 768px)
+            max-width: 200px
+
+    a
+        display: block
+        color: $white
+
+
+button#view-data
+    position: fixed
+    bottom: 15px
+    left: 15px
+    width: 120px
+    height: 60px
+    border-radius: 0
+    background-color: $gray
+    color: $white
+
+.modal
+
+    &.active
+        background-color: rgba(0,0,0, 0.8)
+
+    hr
+        margin: 35px auto
+        border-color: black
+
+    .modal-close
+        font-size: 3.8rem
+        line-height: .8
+
+    .modal-content
+        background-color: $gray
+        color: $white
+
+        a
+            color: $white

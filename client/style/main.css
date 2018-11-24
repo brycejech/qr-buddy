@@ -1,3 +1,36 @@
+nav {
+  position: relative;
+  display: block;
+  background-color: #333333;
+  border-bottom: 1px solid rgba(239, 239, 239, 0.5); }
+  nav::after {
+    content: "";
+    display: table;
+    width: 100%;
+    clear: both; }
+  nav #logo {
+    float: left;
+    color: white; }
+    nav #logo i {
+      font-size: 3.8rem; }
+    nav #logo h3 {
+      position: relative;
+      display: inline-block;
+      margin: 0;
+      margin-left: 10px;
+      top: -3px; }
+
+body {
+  background-color: #1B1B1B;
+  color: #EFEFEF; }
+
+input, textarea, select {
+  background-color: #232323;
+  color: white; }
+
+.label-body {
+  color: white; }
+
 .alert:empty {
   display: none; }
 
@@ -9,6 +42,12 @@ select.hasError {
 .btn-block {
   display: block !important;
   width: 100% !important; }
+
+.panel {
+  background-color: #333333;
+  border-radius: 3px; }
+  .panel:empty {
+    display: none; }
 
 .pane {
   display: none; }
@@ -41,7 +80,58 @@ select.hasError {
       font-size: 3rem; }
     @media screen and (min-width: 992px) {
       #form-select .pane-btn {
-        width: 50%;
-        padding: 25px 0; } }
+        width: 33.333%;
+        padding: 15px 0; } }
     #form-select .pane-btn.active {
       background-color: #4D4D4D; }
+
+#qr-container {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+  -webkit-transition: all .8s ease;
+  -o-transition: all .8s ease;
+  transition: all .8s ease; }
+  #qr-container.active {
+    max-height: 1000px;
+    opacity: 1;
+    margin-bottom: 2rem; }
+  #qr-container img {
+    max-width: 500px; }
+    @media screen and (min-width: 768px) {
+      #qr-container img {
+        max-width: 200px; } }
+  #qr-container a {
+    display: block;
+    color: #EFEFEF; }
+
+button#view-data {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  width: 120px;
+  height: 60px;
+  border-radius: 0;
+  background-color: #333333;
+  color: #EFEFEF; }
+
+.modal.active {
+  background-color: rgba(0, 0, 0, 0.8); }
+
+.modal hr {
+  margin: 35px auto;
+  border-color: black; }
+
+.modal .modal-close {
+  font-size: 3.8rem;
+  line-height: .8; }
+
+.modal .modal-content {
+  background-color: #333333;
+  color: #EFEFEF; }
+  .modal .modal-content a {
+    color: #EFEFEF; }
