@@ -20,7 +20,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -67,12 +67,12 @@ module.exports = function urlRoutes(express){
                 })
                 .catch(e => {
                     console.log(e);
-                    return res.status(500).json({ err: e });
+                    return res.status(500).json({ err: e.message });
                 });
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -90,7 +90,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -108,7 +108,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -122,7 +122,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -140,7 +140,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).send({ err: e });
+            return res.status(500).send({ err: e.message });
         }
     });
 
@@ -157,7 +157,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
@@ -172,7 +172,7 @@ module.exports = function urlRoutes(express){
         }
         catch(e){
             console.log(e);
-            return res.status(500).json({ err: e });
+            return res.status(500).json({ err: e.message });
         }
     });
 
