@@ -7,34 +7,49 @@
         {
             title: 'Email Form',
             selector: '#email-form',
-            imgContainerSelector: '.email-img-container'
+            imgContainerSelector: '#qr-container'
         },
         {
             title: 'URL Form',
             selector: '#url-form',
-            imgContainerSelector: '.url-img-container'
+            imgContainerSelector: '#qr-container'
         },
         {
             title: 'vCard Form',
             selector: '#vcard-form',
-            imgContainerSelector: '.vcard-img-container'
+            imgContainerSelector: '#qr-container'
         },
         {
             title: 'SMS Form',
             selector: '#sms-form',
-            imgContainerSelector: '.sms-img-container'
+            imgContainerSelector: '#qr-container'
         },
         {
             title: 'Phone Form',
             selector: '#phone-form',
-            imgContainerSelector: '.phone-img-container'
+            imgContainerSelector: '#qr-container'
+        },
+        {
+            title: 'Geo Form',
+            selector: '#geo-form',
+            imgContainerSelector: '#qr-container'
+        },
+        {
+            title: 'WiFi Form',
+            selector: '#wifi-form',
+            imgContainerSelector: '#qr-container'
+        },
+        {
+            title: 'Text Form',
+            selector: '#text-form',
+            imgContainerSelector: '#qr-container'
         }
     ];
 
-    forms.forEach(function(descriptor){
+    forms.forEach(descriptor => {
         const form = document.querySelector(descriptor.selector);
 
-        form.addEventListener('submit', _getSubmitHandler(descriptor));
+        (form && form.addEventListener('submit', _getSubmitHandler(descriptor)))
     });
 
     // Keeps a reference to the original form descriptor
@@ -115,10 +130,12 @@
                         const img = document.createElement('img');
                         img.src = response.svgUrl;
                         qrContainer.appendChild(img);
+
+                        qrContainer.classList.add('active');
                     },
                     error: (xhr, status, err) => {
-                        console.error(`Error submitting data to url "${ formDescriptor.title }"`);
-
+                        console.error(`Error submitting data for "${ formDescriptor.title }"`);
+                        console.table(JSON.parse(xhr.response));
                     }
                 });
             }
@@ -194,6 +211,9 @@
 
                 return values.join(', ');
 
+            case 'select':
+                return el.value || el.options[el.selectedIndex].value
+
             default:
                 return el.value;
         }
@@ -210,7 +230,10 @@
         { url: '/api/v1/vcard', containerId: 'vcards' },
         { url: '/api/v1/email', containerId: 'emails' },
         { url: '/api/v1/sms',   containerId: 'smss'   },
-        { url: '/api/v1/phone', containerId: 'phones' }
+        { url: '/api/v1/phone', containerId: 'phones' },
+        { url: '/api/v1/geo',   containerId: 'geos'   },
+        { url: '/api/v1/wifi',  containerId: 'wifis'  },
+        { url: '/api/v1/text',  containerId: 'texts'  }
     ]
     .forEach(endpoint => {
         ajax({
@@ -240,6 +263,7 @@
             error: function(xhr, status, err){
                 console.error('Failed to fetch data for ' + endpoint.url + ' route');
                 console.error(status, err);
+                console.table(JSON.parse(xhr.response));
             }
         });
     });
@@ -257,9 +281,15 @@
           vCardPaneBtn = document.getElementById('vcard-pane-btn'),
           emailPaneBtn = document.getElementById('email-pane-btn'),
           smsPaneBtn   = document.getElementById('sms-pane-btn'),
-          phonePaneBtn = document.getElementById('phone-pane-btn');
+          phonePaneBtn = document.getElementById('phone-pane-btn'),
+          geoPaneBtn   = document.getElementById('geo-pane-btn'),
+          wifiPaneBtn  = document.getElementById('wifi-pane-btn'),
+          textPaneBtn  = document.getElementById('text-pane-btn');
 
-    const buttons = [urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn, phonePaneBtn];
+    const buttons = [
+        urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn,
+        phonePaneBtn, geoPaneBtn, wifiPaneBtn, textPaneBtn
+    ];
 
     function showPane(e){
         const targetPane = this.getAttribute('data-target');
