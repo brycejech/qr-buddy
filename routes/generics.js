@@ -19,7 +19,10 @@ module.exports = function genericRoutes(express){
         'vcard',
         'email',
         'sms',
-        'phone'
+        'phone',
+        'geo',
+        'wifi',
+        'text'
     ];
 
     // Check that req.params.type is supported, 400 if not

@@ -82,7 +82,7 @@ module.exports = function urlRoutes(express){
         if(!req.body.email){
             return res.status(400).send({ message: 'Must provide an email address' });
         }
-        
+
         try{
             const result = await qrBuddy.email(req.body.email, req.body.subject, req.body.body);
 
@@ -112,9 +112,61 @@ module.exports = function urlRoutes(express){
         }
     });
 
+
+    // Create a QR code that calls a phone number
     router.put('/api/v1/phone', async (req, res, next) => {
         try{
             const result = await qrBuddy.phone(req.body.number);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ err: e });
+        }
+    });
+
+
+    // Create a QR code with coordinates
+    router.put('/api/v1/geo', async (req, res, next) => {
+        if(!(req.body.lat && req.body.lon)){
+            return res.status(400).json({ message: 'Missing required parameters lat and/or lon' });
+        }
+
+        try{
+            const result = await qrBuddy.geo(req.body.lat, req.body.lon);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).send({ err: e });
+        }
+    });
+
+    // Create a QR code with network credentials
+    router.put('/api/v1/wifi', async (req, res, next) => {
+        if(!(req.body.type  && req.body.ssid && req.body.password)){
+            return res.status(400).json({ message: 'Must provide network type, SSID, and password' });
+        }
+
+        try{
+            const result = await qrBuddy.wifi(req.body.type, req.body.ssid, req.body.password);
+
+            return res.json(getPublicDescriptor(result));
+        }
+        catch(e){
+            console.log(e);
+            return res.status(500).json({ err: e });
+        }
+    });
+
+    // Create a QR code with plaintext
+    router.put('/api/v1/text', async (req, res, next) => {
+        if(!req.body.text) return res.status(400).json({ message: 'Must provide text to encode' });
+
+        try{
+            const result = await qrBuddy.text(req.body.text);
 
             return res.json(getPublicDescriptor(result));
         }
