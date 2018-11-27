@@ -1,55 +1,261 @@
 'use strict';
 
+const app = (function() {
+
+    // Localhost storage mechanism
+    const storage = (function() {
+        let data = window.localStorage.userData || "[]";
+
+        try{
+            data = JSON.parse(data);
+        }
+        catch(e){
+            window.localStorage.userData = "[]";
+            data = [];
+        }
+
+        function add(item){
+            data.push(item);
+            window.localStorage.userData = JSON.stringify(data);
+        }
+
+        function get(id){
+            return data.filter(item => item.id === id)[0];
+        }
+
+        function getAll(){ return data.reverse() } // Most recent items first
+
+        return { add, get, getAll }
+    }());
+
+    const typeMap = {
+        url:   'URL',
+        vcard: 'vCard',
+        email: 'Email',
+        sms:   'SMS',
+        phone: 'Phone',
+        geo:   'Geo',
+        wifi:  'WiFi',
+        text:  'Text'
+    }
+
+    // DOM Elements
+    const myCodesBtn      = document.getElementById('my-codes-btn'),
+          myCodes         = document.getElementById('my-codes'),
+          sidebar         = document.getElementById('code-panel'),
+          sidebarCloseBtn = document.getElementById('panel-close');
+
+    const paneContainer = document.getElementById('pane-container');
+
+    const btnContainer = document.getElementById('form-select'),
+          paneBtns     = Array.from(btnContainer.querySelectorAll('.pane-btn'));
+
+
+    function addItem(item){
+        // Add new item to storage
+        storage.add(item);
+
+        // Add to sidebar
+        myCodes.innerHTML = _formatItemHTML(item) + myCodes.innerHTML;
+
+        window.modal(`#_${ item.id }`);
+        setTimeout(showSidebar, 750);
+    }
+
+
+    function _formatItemHTML(item){
+
+        // item must have dataType property
+        if(!item.hasOwnProperty('dataType')) return;
+
+        const data = item.dataAttachment;
+
+        let description;
+        switch(item.dataType){
+            case 'url':
+                description = `Link to <a href="${ data.url }" target="_blank" rel="noopener">${ data.url }</a>`;
+                break;
+            case 'vcard':
+                description = `vCard for ${ data.firstName } ${ data.lastName}`;
+                break;
+            case 'email':
+                description = `Send email to ${ data.address }`;
+                break;
+            case 'sms':
+                description = `Send SMS to ${ data.number }`;
+                break;
+            case 'phone':
+                description = `Call ${ data.number }`;
+                break;
+            case 'geo':
+                description = `Coordinates ${ data.lat }, ${ data.lon }`;
+                break;
+            case 'wifi':
+                description = `Network credentials for ${ data.ssid }`;
+                break;
+            case 'text':
+                description = `Encoded text: ${ data.string }`;
+                break;
+            default:
+                description = 'Type unknown';
+                break;
+        }
+
+        return `
+            <div class="col-xs-6 col-sm-12">
+                <div class="data-item px-1 py-1 rounded" data-toggle="modal" data-target="#_${ item.id }">
+                    <span class="td-ul full-width text-center mb-1">
+                        QR Type: ${ typeMap[item.dataType] }
+                    </span>
+                    <img src="${ item.svgUrl }" class="qr-img" alt="QR image for ${ data.url }">
+                </div>
+            </div>
+
+            <!-- Item Modal ${ item.id } -->
+            <div id="_${ item.id }" class="modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-close">&times;</div>
+                        <h3 class="text-center">QR Description</h3>
+                        <table>
+                            <tr>
+                                <th>Type:</th>
+                                <td>${ typeMap[item.dataType] }</td>
+                            </tr>
+                            <tr>
+                                <th>Created:</th>
+                                <td>${ item.created }</td>
+                            </tr>
+                            <tr>
+                                <th>Description:</th>
+                                <td>
+                                    ${ description }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>API URL:</th>
+                                <td>
+                                    <a href="${ item.apiUrl }" target="_blank" rel="noopener">View Page</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Image URL:</th>
+                                <td>
+                                    <a href="${ item.svgUrl }" target="_blank" rel="noopener">View Image</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="qr-container">
+                            <img class="qr-img" src="${ item.svgUrl }">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+
+    function showPane(btn){
+        const targetPane = btn.getAttribute('data-target');
+
+        if(!targetPane) return;
+
+        Array.from(paneContainer.querySelectorAll('.pane'))
+            .forEach( pane => pane.classList.remove('active') );
+
+        const pane = document.querySelector(targetPane);
+
+        if(pane){
+            pane.classList.add('active');
+
+            paneBtns.forEach( btn => btn.classList.remove('active') );
+
+            btn.classList.add('active');
+        }
+    }
+
+    function showSidebar(){ sidebar.className = 'active' }
+    function closeSidebar(){ sidebar.className = '' }
+    function toggleSidebar(){
+        sidebar.className ? closeSidebar() : showSidebar();
+    }
+
+
+    // UI Initialization
+    (function() {
+
+        // Populate the "My Codes" sidebar
+        myCodes.innerHTML = storage.getAll().map(_formatItemHTML).join('');
+
+        // Hide/show sidebar on button click
+        myCodesBtn.addEventListener('click', toggleSidebar);
+
+        // Hide sidebar on click outside of sidebar (e.g. document)
+        document.addEventListener('click', e => {
+            if(sidebar.className !== 'active') return;
+            if(e.target === myCodesBtn) return;
+            if(e.target === sidebarCloseBtn) return closeSidebar();
+
+            let el = e.target;
+
+            while(el && el.parentNode !== document){
+                if(el === sidebar) return;
+                el = el.parentNode;
+            }
+            closeSidebar();
+        });
+
+    }());
+
+
+    // Public App Methods
+    const publicAPI = { addItem, showPane }
+
+    return publicAPI;
+}());
+
 // Generic form handler
 (function() {
 
     const forms = [
         {
             title: 'Email Form',
-            selector: '#email-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#email-form'
         },
         {
             title: 'URL Form',
-            selector: '#url-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#url-form'
         },
         {
             title: 'vCard Form',
-            selector: '#vcard-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#vcard-form'
         },
         {
             title: 'SMS Form',
-            selector: '#sms-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#sms-form'
         },
         {
             title: 'Phone Form',
-            selector: '#phone-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#phone-form'
         },
         {
             title: 'Geo Form',
-            selector: '#geo-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#geo-form'
         },
         {
             title: 'WiFi Form',
-            selector: '#wifi-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#wifi-form'
         },
         {
             title: 'Text Form',
-            selector: '#text-form',
-            imgContainerSelector: '#qr-container'
+            selector: '#text-form'
         }
     ];
 
     forms.forEach(descriptor => {
         const form = document.querySelector(descriptor.selector);
 
-        (form && form.addEventListener('submit', _getSubmitHandler(descriptor)))
+        form && (form.addEventListener('submit', _getSubmitHandler(descriptor)))
     });
 
     // Keeps a reference to the original form descriptor
@@ -112,42 +318,7 @@
                     dataType: 'json',
                     data:      JSON.stringify(data),
                     success: (response) => {
-
-                        const qrContainer = document.querySelector(formDescriptor.imgContainerSelector);
-
-                        // Clear contents
-                        qrContainer.innerHTML = '';
-
-                        // Full-screen link
-                        const imgAnchor = document.createElement('a');
-                        imgAnchor.innerText = 'View Fullscreen';
-                        imgAnchor.setAttribute('target', '_blank');
-                        imgAnchor.setAttribute('rel', 'noopener');
-                        imgAnchor.href = response.svgUrl;
-                        qrContainer.appendChild(imgAnchor);
-
-                        // Display the QR image
-                        const img = document.createElement('img');
-                        img.src = response.svgUrl;
-                        qrContainer.appendChild(img);
-
-                        qrContainer.classList.add('active');
-
-                        // Store user-submitted QR codes in localStorage
-                        if(window.hasOwnProperty('localStorage')){
-
-                            let userData = window.localStorage.userData || "[]";
-                                userData = JSON.parse(userData);
-
-                            userData.push(response);
-
-                            // Save space by only keeping 25 most recent
-                            if(userData.length > 25){
-                                while(userData.length > 25) userData.shift();
-                            }
-
-                            window.localStorage.userData = JSON.stringify(userData);
-                        }
+                        app.addItem(response);
                     },
                     error: (xhr, status, err) => {
                         console.error(`Error submitting data for "${ formDescriptor.title }"`);
@@ -237,7 +408,6 @@
 
 }());
 
-
 // Get all submitted data and display it
 (function(){
 
@@ -283,49 +453,5 @@
             }
         });
     });
-
-})();
-
-
-// Handle pane switching
-(function(){
-    // Containers
-    const paneContainer = document.getElementById('pane-container');
-
-    // Buttons
-    const urlPaneBtn   = document.getElementById('url-pane-btn'),
-          vCardPaneBtn = document.getElementById('vcard-pane-btn'),
-          emailPaneBtn = document.getElementById('email-pane-btn'),
-          smsPaneBtn   = document.getElementById('sms-pane-btn'),
-          phonePaneBtn = document.getElementById('phone-pane-btn'),
-          geoPaneBtn   = document.getElementById('geo-pane-btn'),
-          wifiPaneBtn  = document.getElementById('wifi-pane-btn'),
-          textPaneBtn  = document.getElementById('text-pane-btn');
-
-    const buttons = [
-        urlPaneBtn, vCardPaneBtn, emailPaneBtn, smsPaneBtn,
-        phonePaneBtn, geoPaneBtn, wifiPaneBtn, textPaneBtn
-    ];
-
-    function showPane(e){
-        const targetPane = this.getAttribute('data-target');
-
-        if(!targetPane) return;
-
-        Array.from(paneContainer.querySelectorAll('.pane'))
-            .forEach( pane => pane.classList.remove('active') );
-
-        const pane = document.querySelector(targetPane);
-
-        if(pane){
-            pane.classList.add('active');
-
-            buttons.forEach( btn => btn.classList.remove('active') );
-
-            this.classList.add('active');
-        }
-    }
-
-    buttons.forEach( btn => btn.addEventListener('click', showPane) );
 
 })();
