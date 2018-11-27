@@ -132,6 +132,22 @@
                         qrContainer.appendChild(img);
 
                         qrContainer.classList.add('active');
+
+                        // Store user-submitted QR codes in localStorage
+                        if(window.hasOwnProperty('localStorage')){
+
+                            let userData = window.localStorage.userData || "[]";
+                                userData = JSON.parse(userData);
+
+                            userData.push(response);
+
+                            // Save space by only keeping 25 most recent
+                            if(userData.length > 25){
+                                while(userData.length > 25) userData.shift();
+                            }
+
+                            window.localStorage.userData = JSON.stringify(userData);
+                        }
                     },
                     error: (xhr, status, err) => {
                         console.error(`Error submitting data for "${ formDescriptor.title }"`);
@@ -151,7 +167,7 @@
     function _parents(el, cb){
         const str = cb;
         typeof cb === 'string' && (cb = (el) => el.matches(str));
-        (() => {})();
+
         if( cb(el) ) return el;
 
         // Traverse up the DOM
