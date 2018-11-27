@@ -3,38 +3,38 @@
         <div class="col-12">
         </div>
         <div class="col-md-4">
-            <div class="panel pt-2 mb-2">
+            <div class="panel pt-2">
                 <h4 class="text-center">QR Code Type</h4>
                 <div id="form-select">
-                    <div id="url-pane-btn" class="pane-btn active" data-target="#url-pane">
+                    <div id="url-pane-btn" class="pane-btn active" data-target="#url-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">URL</span>
                         <i class="fas fa-link"></i>
                     </div>
-                    <div id="vcard-pane-btn" class="pane-btn" data-target="#contact-pane">
+                    <div id="vcard-pane-btn" class="pane-btn" data-target="#contact-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">vCard</span>
                         <i class="fas fa-address-card"></i>
                     </div>
-                    <div id="email-pane-btn" class="pane-btn" data-target="#email-pane">
+                    <div id="email-pane-btn" class="pane-btn" data-target="#email-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">Email</span>
                         <i class="far fa-envelope"></i>
                     </div>
-                    <div id="sms-pane-btn" class="pane-btn" data-target="#sms-pane">
+                    <div id="sms-pane-btn" class="pane-btn" data-target="#sms-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">SMS</span>
                         <i class="far fa-comments"></i>
                     </div>
-                    <div id="phone-pane-btn" class="pane-btn" data-target="#phone-pane">
+                    <div id="phone-pane-btn" class="pane-btn" data-target="#phone-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">Phone</span>
                         <i class="fas fa-phone-volume"></i>
                     </div>
-                    <div id="geo-pane-btn" class="pane-btn" data-target="#geo-pane">
+                    <div id="geo-pane-btn" class="pane-btn" data-target="#geo-pane" onclick="app.showPane(this);">
                         <span class="full-width textcenter">Geo</span>
                         <i class="fas fa-globe-americas"></i>
                     </div>
-                    <div id="wifi-pane-btn" class="pane-btn" data-target="#wifi-pane">
+                    <div id="wifi-pane-btn" class="pane-btn" data-target="#wifi-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">WiFi</span>
                         <i class="fas fa-wifi"></i>
                     </div>
-                    <div id="text-pane-btn" class="pane-btn" data-target="#text-pane">
+                    <div id="text-pane-btn" class="pane-btn" data-target="#text-pane" onclick="app.showPane(this);">
                         <span class="full-width text-center">Text</span>
                         <i class="fas fa-font"></i>
                     </div>
@@ -407,13 +407,14 @@
                     </form>
                 </div>
             </div>
-
-
-            <div id="qr-container" class="panel mb-2"></div>
         </div>
     </div>
-    <div class="row">
-    </div>
+</div>
+
+<div id="code-panel">
+    <h1 id="panel-close" class="text-right my-0 mr-1">&times;</h1>
+    <h2 class="text-center">My Codes</h2>
+    <div id="my-codes"></div>
 </div>
 
 <!-- Data Modal (remove in prod) -->
