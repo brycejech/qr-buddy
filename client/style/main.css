@@ -35,6 +35,7 @@ body {
 
 input, textarea, select {
   background-color: #232323;
+  border-color: #575757;
   color: white; }
 
 .label-body {
@@ -70,7 +71,7 @@ select.hasError {
     font-family: 'Source Sans Pro', sans-serif;
     text-align: center;
     padding: 15px 35px;
-    width: 125px;
+    width: 33.333%;
     margin: 0;
     float: left;
     border: 1px solid rgba(0, 0, 0, 0.25);
@@ -87,6 +88,9 @@ select.hasError {
     #form-select .pane-btn i {
       font-weight: 600;
       font-size: 3rem; }
+    @media screen and (min-width: 768px) {
+      #form-select .pane-btn {
+        width: 25%; } }
     @media screen and (min-width: 992px) {
       #form-select .pane-btn {
         width: 33.333%;
