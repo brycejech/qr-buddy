@@ -59,7 +59,7 @@ const app = (function() {
         myCodes.innerHTML = _formatItemHTML(item) + myCodes.innerHTML;
 
         window.modal(`#_${ item.id }`);
-        setTimeout(showSidebar, 750);
+        // setTimeout(showSidebar, 750);
     }
 
 
