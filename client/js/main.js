@@ -133,15 +133,21 @@ const app = (function() {
                                 </td>
                             </tr>
                             <tr>
-                                <th>API URL:</th>
+                                <th>SVG Image:</th>
                                 <td>
-                                    <a href="${ item.apiUrl }" target="_blank" rel="noopener">View Page</a>
+                                    <a href="${ item.svgUrl }" target="_blank" rel="noopener">View Image</a> or <a href="${ item.svgUrl }" download="${ item.svgUrl}.svg">Download</a>
                                 </td>
                             </tr>
                             <tr>
-                                <th>Image URL:</th>
+                                <th>PNG Image:</th>
                                 <td>
-                                    <a href="${ item.svgUrl }" target="_blank" rel="noopener">View Image</a>
+                                    <a href="${ item.pngUrl }" target="_blank" rel="noopener">View Image</a> or <a href="${ item.pngUrl }" download="${ item.id }.png">Download</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>API URL:</th>
+                                <td>
+                                    <a href="${ item.apiUrl }" target="_blank" rel="noopener">View Page</a>
                                 </td>
                             </tr>
                         </table>
