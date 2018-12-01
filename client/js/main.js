@@ -319,10 +319,11 @@ const app = (function() {
                 }
 
                 ajax({
-                    url:       url,
-                    method:    method,
-                    dataType: 'json',
-                    data:      JSON.stringify(data),
+                    url:          url,
+                    method:       method,
+                    dataType:    'json',
+                    contentType: 'application/json; charset=UTF-8',
+                    data:         data,
                     success: (response) => {
                         app.addItem(response);
                     },
